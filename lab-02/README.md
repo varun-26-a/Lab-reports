@@ -8,9 +8,9 @@
 
 ## Live Link
 
-**Deployment URL:** YOUR_LIVE_URL_HERE
+**Deployment URL:** https://lab-reports-2-1.onrender.com/books/
 
-*(If the project cannot be deployed, replace this line with the reason and rely on the Postman screenshots below.)*
+Hosted on Render (free plan). The first request after a period of inactivity can take up to a minute while the service wakes up. Opening the bare URL without `/books/` returns the app's JSON 404 message, which is expected.
 
 ## Objective
 
@@ -128,17 +128,18 @@ Screenshots of each endpoint (request, status and response from a live run of th
 
 ### 1. Why `await` the database call?
 
-Database calls take time and return a Promise. `await` pauses that function until the result is ready, so we use real data and not an unfinished Promise. It also lets us wait for the connection to open before the server starts.
+Every database query is asynchronous and returns a Promise. Without `await`, the next line would run before the rows arrive and I would be working with a pending Promise instead of the data. `await` makes the function wait for the result, and the same idea is used in `initializeDBAndServer()` so the server only starts listening once the database connection has opened successfully.
 
 ### 2. What is SQL injection and how do placeholders prevent it?
 
-SQL injection is when an attacker puts SQL code into an input, such as `1 OR 1=1`, and it becomes part of the query. With `?` placeholders, the SQL text and the values are sent separately, so the input is always treated as data and never as SQL code.
+SQL injection happens when user input is joined into the SQL string, so an input like `1 OR 1=1` changes what the query does. With `?` placeholders the query text is fixed first and the values are passed separately, so the database always treats the input as plain data and never as SQL.
 
 ### 3. When is PUT used instead of POST?
 
-POST creates a new resource (the server picks the id). PUT replaces or updates an existing resource at a known URL, such as `/books/3/`.
+POST is used to create a new record, and the server decides its id. PUT is used when the record already exists at a known URL, such as `/books/3/`, and its fields need to be updated.
 
 ## Notes: Problems Faced and Solutions
 
-- Add your own notes here: an error you hit while testing in Postman or deploying, and how you fixed it.
+- **Render deploy crashed on start (`GLIBC_2.38 not found`).** The deploy logs showed `ERR_DLOPEN_FAILED` for `node_sqlite3.node`. The `sqlite3` v6 package ships a prebuilt binary that needs a newer Linux C library than Render's servers have. I fixed it by changing the dependency to `sqlite3@5.1.7` in `package.json`, committing, and redeploying.
+- Opening the Render URL without `/books/` shows the JSON 404 message because the app has no route at `/`. The working endpoints all start with `/books/`.
 - The free hosting plan used for deployment may reset the file system on restart, so changes made through POST, PUT and DELETE on the live link can disappear after a redeploy. The local `books.db` file keeps changes.
