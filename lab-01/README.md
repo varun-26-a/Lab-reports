@@ -10,7 +10,7 @@
 
 ## Live Link
 
-**Deployment URL:** https://lab-reports-hj5e.onrender.com/
+**Deployment URL:** https://lab-reports-2-1.onrender.com
 
 *(Hosted on Render's free tier. The first request after a period of inactivity can take up to a minute while the server wakes up.)*
 
