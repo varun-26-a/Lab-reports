@@ -8,7 +8,7 @@
 
 ## Live Link
 
-**Deployment URL:** [YOUR_LIVE_URL_HERE/books/](https://lab-reports-3-uv4l.onrender.com)
+**Deployment URL:** (https://lab-reports-3-uv4l.onrender.com)
 
 Hosted on Render (free plan). The first request after a period of inactivity can take up to a minute while the service wakes up. Opening the bare URL without `/books/` returns the app's JSON 404 message, which is expected.
 
